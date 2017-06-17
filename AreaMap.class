@@ -3,22 +3,27 @@ import java.util.*;
 public class AreaMap {
 	private ArrayList<Node> nodes = new ArrayList<>();
 	private Map<Node, ConnectedNodes[]> map = new HashMap<Node, ConnectedNodes[]>();
-	private int mapSize, numberOfConnections, randTemp, k =0;
+	private int mapSize, numberOfConnections, randTemp, pathCost=0, shortestPathCost = 0, k =0;
+	private int[] placeMarkers;
 	private ArrayList<ConnectedNodes[]> CN = new ArrayList<>();
 	private ArrayList<Integer> prevs = new ArrayList<>();
 	//private ArrayList<ArrayList<ConnectedNodes>> possiblePaths= new ArrayList<>();
 	private ArrayList<Node> shortestPath = new ArrayList<>();
 	private ArrayList<Node> path = new ArrayList<>();
 	private String printIt = "";
-	private Node currNode;
+	private Node currNode, prevNode;
 	
 	public AreaMap(int mapSize, int numberOfConnections){
 		this.mapSize = mapSize;
 		this.numberOfConnections = numberOfConnections;
-		
+		this.placeMarkers = new int[mapSize-1];
 		for(int i = 0; i< mapSize; i++){
 			nodes.add(new Node((char)(65+i)));
 			CN.add(new ConnectedNodes[numberOfConnections]);
+		}
+		
+		for (int i = 0; i < mapSize - 1; i++){
+			placeMarkers[i] = 0;
 		}
 		
 		for (int i = 0; i < mapSize; i++){
@@ -45,15 +50,51 @@ public class AreaMap {
 		return nodes;
 	}
 	
-	//Next attempt is to instead of gathering a list of all of the paths, I am going to determine the path cosst as the path is being found.
-	//Then compare that path cost to the current shortest path cost and see if it's lower. 
-	//When all paths have been checked, return the path with the lowest path cost.
-	/*public ArrayList<Node> getShortestPath(Node startNode, Node endNode){
-		path.add(map.get(startNode)[0].getNode());
-		
+	public ArrayList<Node> getShortestPath(Node startNode, Node endNode){
+		while (k < (Math.pow(numberOfConnections, (mapSize - 1)))){
+			currNode = startNode;
+			path.add(currNode);
+			
+			for (int i = 0; i < mapSize-1; i++){
+				pathCost+= map.get(currNode)[placeMarkers[i]].getPathCost();
+				currNode = map.get(currNode)[placeMarkers[i]].getNode();
+				
+				
+				
+				if ((currNode.equals(endNode))||(path.contains(currNode))){
+					if (((pathCost < shortestPathCost)||(shortestPathCost ==0))&&(!path.contains(currNode))){
+						shortestPathCost = pathCost;
+						shortestPath = new ArrayList<>();
+						path.add(currNode);
+						for (int j = 0; j < path.size(); j++){
+							shortestPath.add(path.get(j));
+						}
+					}
+					increment();
+					i = mapSize;
+				} else {
+					path.add(currNode);
+				}
+			}
+			k++;
+			pathCost = 0;
+			path = new ArrayList<>();
+		}
+		return shortestPath;
 	}
 	
-	public ArrayList<Node> getThresholdPath(Node startNode, Node endNode, int thresh){
+	public void increment(){
+		for (int i = placeMarkers.length-1; i >=0; i--){
+			if (placeMarkers[i]>=numberOfConnections -1){
+				placeMarkers[i] = 0;
+			} else {
+				placeMarkers[i]++;
+				i = -1;
+			}
+		}
+	}
+	
+	/*public ArrayList<Node> getThresholdPath(Node startNode, Node endNode, int thresh){
 		
 	}*/
 	
