@@ -1,0 +1,19 @@
+public class Node {
+	private char id;
+	
+	public Node(char id){
+		this.id = id;
+	}
+	
+	public boolean equals(Node other){
+		if (this.toString().equals(other.toString())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public String toString(){
+		return "Node: " + id;
+	}
+}
