@@ -1,0 +1,21 @@
+public class ConnectedNodes {
+	private int pathCost;
+	private Node node;
+	
+	public ConnectedNodes(int pathCost, Node node){
+		this.pathCost = pathCost;
+		this.node = node;
+	}
+	
+	public Node getNode(){
+		return node;
+	}
+	
+	public int getPathCost(){
+		return pathCost;
+	}
+	
+	public String toString(){
+		return getNode() + ", " + getPathCost() + " ";
+	}
+}
