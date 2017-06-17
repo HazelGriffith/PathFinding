@@ -1,0 +1,16 @@
+import java.util.ArrayList;
+
+public class Main{
+	
+	public static void main(String[] args){
+		AreaMap area = new AreaMap(5,4);
+		System.out.println(area);
+		ArrayList<Node> path = area.getShortestPath(area.getNodes().get(0), area.getNodes().get(4));
+		System.out.println(area.getNodes().get(0));
+		System.out.println(area.getNodes().get(4));
+		System.out.println(path.isEmpty());
+		for (int i = 0; i < path.size(); i++){
+			System.out.println(path.get(i));
+		}
+	}
+}
