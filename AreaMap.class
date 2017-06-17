@@ -1,0 +1,72 @@
+import java.util.*;
+
+public class AreaMap {
+	private ArrayList<Node> nodes = new ArrayList<>();
+	private Map<Node, ConnectedNodes[]> map = new HashMap<Node, ConnectedNodes[]>();
+	private int mapSize, numberOfConnections, randTemp, k =0;
+	private ArrayList<ConnectedNodes[]> CN = new ArrayList<>();
+	private ArrayList<Integer> prevs = new ArrayList<>();
+	//private ArrayList<ArrayList<ConnectedNodes>> possiblePaths= new ArrayList<>();
+	private ArrayList<Node> shortestPath = new ArrayList<>();
+	private ArrayList<Node> path = new ArrayList<>();
+	private String printIt = "";
+	private Node currNode;
+	
+	public AreaMap(int mapSize, int numberOfConnections){
+		this.mapSize = mapSize;
+		this.numberOfConnections = numberOfConnections;
+		
+		for(int i = 0; i< mapSize; i++){
+			nodes.add(new Node((char)(65+i)));
+			CN.add(new ConnectedNodes[numberOfConnections]);
+		}
+		
+		for (int i = 0; i < mapSize; i++){
+			for (int j = 0; j < numberOfConnections; j++){
+				randTemp = (int) (Math.random()*mapSize);
+				
+				while ((randTemp == i)||(prevs.contains(randTemp))){
+					randTemp = (int) (Math.random()*mapSize);
+				}
+				prevs.add(randTemp);
+				
+				CN.get(i)[j] = new ConnectedNodes((int) (Math.random()*100), (nodes.get(randTemp)));
+			}
+			map.put(nodes.get(i), CN.get(i) );
+			prevs.clear();
+		}
+	}
+	
+	public Map<Node, ConnectedNodes[]> getMap(){
+		return map;
+	}
+	
+	public ArrayList<Node> getNodes(){
+		return nodes;
+	}
+	
+	//Next attempt is to instead of gathering a list of all of the paths, I am going to determine the path cosst as the path is being found.
+	//Then compare that path cost to the current shortest path cost and see if it's lower. 
+	//When all paths have been checked, return the path with the lowest path cost.
+	/*public ArrayList<Node> getShortestPath(Node startNode, Node endNode){
+		path.add(map.get(startNode)[0].getNode());
+		
+	}
+	
+	public ArrayList<Node> getThresholdPath(Node startNode, Node endNode, int thresh){
+		
+	}*/
+	
+	public String toString(){
+		for (int i = 0; i < mapSize; i ++){
+			printIt += nodes.get(i);
+			printIt += " connects to ";
+			for (int j = 0; j < numberOfConnections; j ++){
+				printIt += map.get(nodes.get(i))[j];
+			}
+			printIt += "\n";
+		}
+		System.out.println(map.size());
+		return printIt;
+	}
+}
